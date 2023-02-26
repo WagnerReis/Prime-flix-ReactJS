@@ -1,7 +1,7 @@
-import { resolve } from "path";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import api from "../../services/api";
+import './movie-info.css';
 
 export default function Movie() {
   const { id } = useParams();
@@ -54,6 +54,15 @@ export default function Movie() {
       <span>{movieFormated.overview}</span>
 
       <strong>Avaliação: {parseFloat(movieFormated.vote_average.toFixed(1))} /10</strong>
+
+      <div className="area-buttons">
+        <button>Salvar</button>
+        <button>
+          <a href="#">
+            Trailer 
+          </a>
+        </button>
+      </div>
 
     </div>
   );
