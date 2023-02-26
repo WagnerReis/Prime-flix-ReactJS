@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import {  useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
-import './movie-info.css';
+import "./movie-info.css";
 
 export default function Movie() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const [movie, setMovie] = useState([localStorage.getItem("movie")]);
+  const [movie, setMovie] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,22 +26,24 @@ export default function Movie() {
         })
         .catch(() => {
           console.log("FILME NAO ENCONTRADO");
+          navigate("/", { replace: true });
+          return;
         });
     }
 
     loadMovies();
 
     return () => {
-      console.log("componente desmontado")
-    }
-  }, []);
+      console.log("FILME NÃO ENCONTRADO");
+    };
+  }, [id, navigate]);
 
-  if(loading) {
-    return(
+  if (loading) {
+    return (
       <div className="movie-info">
         <h1>Carregando detalhes...</h1>
       </div>
-    )
+    );
   }
 
   const movieFormated = JSON.parse(JSON.stringify(movie));
@@ -48,22 +51,24 @@ export default function Movie() {
   return (
     <div className="movie-info">
       <h1>{movieFormated.title}</h1>
-      <img src={`https://image.tmdb.org/t/p/original/${movieFormated.backdrop_path}`} alt={movieFormated.title} />
+      <img
+        src={`https://image.tmdb.org/t/p/original/${movieFormated.backdrop_path}`}
+        alt={movieFormated.title}
+      />
 
       <h3>Sinopse</h3>
       <span>{movieFormated.overview}</span>
 
-      <strong>Avaliação: {parseFloat(movieFormated.vote_average.toFixed(1))} /10</strong>
+      <strong>
+        Avaliação: {parseFloat(movieFormated.vote_average.toFixed(1))} /10
+      </strong>
 
       <div className="area-buttons">
         <button>Salvar</button>
         <button>
-          <a href="#">
-            Trailer 
-          </a>
+          <a target="_blank" rel="external noreferrer" href={`https://youtube.com/results?search_query=${movieFormated.title} Trailer`}>Trailer</a>
         </button>
       </div>
-
     </div>
   );
 }
