@@ -22,7 +22,7 @@ export default function Movie() {
         .then((response) => {
           setMovie(response.data);
           setLoading(false);
-          localStorage.setItem("movie", response.data);
+          localStorage.setItem("movie", JSON.stringify(response.data));
         })
         .catch(() => {
           console.log("FILME NAO ENCONTRADO");
@@ -38,6 +38,27 @@ export default function Movie() {
     };
   }, [id, navigate]);
 
+  const movieFormated = JSON.parse(JSON.stringify(movie));
+
+  function saveMovie() {
+    const myList = localStorage.getItem("@primeflix");
+
+    let savedMovies = JSON.parse(myList) || [];
+
+    const hasMovie = savedMovies.some(
+      (savedMovie: { id: string }) => savedMovie.id === movieFormated.id
+    );
+
+    if (hasMovie) {
+      alert("ESSE FILME JÁ ESTÁ NA LISTA");
+      return;
+    }
+
+    savedMovies.push(movie);
+    localStorage.setItem("@primeflix", JSON.stringify(savedMovies));
+    alert("FILME SALVO COM SUCESSO!");
+  }
+
   if (loading) {
     return (
       <div className="movie-info">
@@ -45,8 +66,6 @@ export default function Movie() {
       </div>
     );
   }
-
-  const movieFormated = JSON.parse(JSON.stringify(movie));
 
   return (
     <div className="movie-info">
@@ -64,9 +83,15 @@ export default function Movie() {
       </strong>
 
       <div className="area-buttons">
-        <button>Salvar</button>
+        <button onClick={saveMovie}>Salvar</button>
         <button>
-          <a target="_blank" rel="external noreferrer" href={`https://youtube.com/results?search_query=${movieFormated.title} Trailer`}>Trailer</a>
+          <a
+            target="blank"
+            rel="external noreferrer"
+            href={`https://youtube.com/results?search_query=${movieFormated.title} Trailer`}
+          >
+            Trailer
+          </a>
         </button>
       </div>
     </div>

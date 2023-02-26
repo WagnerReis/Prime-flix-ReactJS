@@ -19,7 +19,7 @@ export default function Home() {
       const result = response.data.results.slice(0, 10);
 
       setMovies(result);
-      localStorage.setItem("movies", result);
+      localStorage.setItem("movies", JSON.stringify(result));
     }
 
     loadMovies();
