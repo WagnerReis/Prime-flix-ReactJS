@@ -16,7 +16,7 @@ export default function Home() {
         },
       });
 
-      const result = response.data.results.slice(0, 10)
+      const result = response.data.results.slice(0, 10);
 
       setMovies(result);
       localStorage.setItem("movies", result);
@@ -28,12 +28,12 @@ export default function Home() {
   return (
     <div className="container">
       <div className="movie-list">
-        {movies.map((movie) => {
+        {JSON.parse(JSON.stringify(movies)).map((movie: { [x: string]: any; }) => {
           return(
-            <article key={movie['id']}>
-              <strong>{movie['title']}</strong>
-              <img src={`https://image.tmdb.org/t/p/original/${movie['poster_path']}`} alt={movie['title']}/>
-              <Link to={`/movie/${movie['id']}`}>Acessar</Link>
+            <article key={movie.id}>
+              <strong>{movie.title}</strong>
+              <img src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`} alt={movie.title}/>
+              <Link to={`/movie/${movie.id}`}>Acessar</Link>
             </article>
           )
         })}
