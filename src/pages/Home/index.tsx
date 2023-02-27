@@ -4,7 +4,7 @@ import api from "../../services/api";
 import './home.css';
 
 export default function Home() {
-  const [movies, setMovies] = useState([localStorage.getItem("movies")]);
+  const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     async function loadMovies() {
@@ -18,7 +18,7 @@ export default function Home() {
 
       const result = response.data.results.slice(0, 10);
 
-      setMovies(result);
+      setMovies(JSON.parse(JSON.stringify(result)));
       localStorage.setItem("movies", JSON.stringify(result));
     }
 
@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <div className="container">
       <div className="movie-list">
-        {JSON.parse(JSON.stringify(movies)).map((movie: { [x: string]: any; }) => {
+        {movies.map((movie: { [x: string]: any; }) => {
           return(
             <article key={movie.id}>
               <strong>{movie.title}</strong>
